@@ -1,4 +1,4 @@
-Copyright (c) 2014 1000ch
+Copyright (c) 2014 Shogo Sensui
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
