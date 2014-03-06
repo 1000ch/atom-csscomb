@@ -1,6 +1,6 @@
 {
   "name": "atom-csscomb",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "./lib/atom-csscomb",
   "private": true,
   "description": "Sort css properties",
