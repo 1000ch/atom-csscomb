@@ -1,4 +1,8 @@
-# atom-csscomb
+# [atom-csscomb](https://atom.io/packages/atom-csscomb)
+
+## About
+
+Sort your css property for efficient gzip deflation with [CSSComb](https://github.com/csscomb/csscomb.js).
 
 ## Installation
 
