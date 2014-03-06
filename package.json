@@ -1,0 +1,21 @@
+{
+  "name": "atom-csscomb",
+  "version": "0.1.0",
+  "main": "./lib/atom-csscomb",
+  "private": true,
+  "description": "A short description of your package",
+  "repository": "https://github.com/atom/atom-csscomb",
+  "license": "MIT",
+  "author": {
+    "name": "Shogo Sensui",
+    "email": "shogo.sensui@gmail.com",
+    "url": "http://1000ch.net"
+  },
+  "engines": {
+    "atom": "*",
+    "node": "*"
+  },
+  "dependencies": {
+    "csscomb": "~2.0.4"
+  }
+}

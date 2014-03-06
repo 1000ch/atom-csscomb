@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  '.overlayer':
+      'Run CSSComb': 'atom-csscomb:execute'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'CSSComb'
+      'submenu': [
+        { 'label': 'Run CSSComb', 'command': 'atom-csscomb:execute' }
+      ]
+    ]
+  }
+]
