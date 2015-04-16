@@ -5,7 +5,7 @@ path = require('path')
 
 CSSComb = require('csscomb')
 csscomb = new CSSComb('csscomb')
-userConfigPath = atom.project.resolve('.csscomb.json')
+userConfigPath = atom.project.getDirectories()[0]?.resolve('.csscomb.json')
 atomConfigPath = path.join(__dirname, '../csscomb.json')
 
 if fs.existsSync(userConfigPath)
@@ -14,11 +14,11 @@ if fs.existsSync(userConfigPath)
 else if fs.existsSync(atomConfigPath)
   atomConfigJson = require(atomConfigPath)
   csscomb.configure(atomConfigJson)
-  
+
 module.exports =
 
   activate: (state) ->
-    atom.workspaceView.command 'csscomb:execute', => @execute()
+    atom.commands.add 'atom-workspace', 'csscomb:execute', => @execute()
 
   getExecPath: ->
     "ATOM_SHELL_INTERNAL_RUN_AS_NODE=1 '#{process.execPath}'"
@@ -27,7 +27,7 @@ module.exports =
     atom.config.get('csscomb.nodepath')
 
   execute: ->
-    editor = atom.workspace.getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
 
     return unless editor isnt no
 
