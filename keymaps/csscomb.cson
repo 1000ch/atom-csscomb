@@ -1,2 +1,2 @@
-'.workspace':
-  'ctrl-c': 'csscomb:execute'
+'atom-workspace':
+  'ctrl-s': 'csscomb:execute'
