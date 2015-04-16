@@ -1,6 +1,6 @@
 {
   "name": "atom-csscomb",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "./lib/csscomb",
   "private": true,
   "description": "Sort css properties",
@@ -10,15 +10,15 @@
   "repository": "https://github.com/1000ch/atom-csscomb",
   "license": "MIT",
   "author": {
-    "name": "Shogo Sensui",
+    "name": "1000ch",
     "email": "shogo.sensui@gmail.com",
-    "url": "http://1000ch.net"
+    "url": "http://github.com/1000ch"
   },
   "engines": {
     "atom": "*",
     "node": "*"
   },
   "dependencies": {
-    "csscomb": "~2.0.4"
+    "csscomb": "^3.0.4"
   }
 }
