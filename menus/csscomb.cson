@@ -1,16 +1,16 @@
-# See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
-  '.overlayer':
-      'Sort properties': 'csscomb:execute'
+  'atom-workspace': [{
+    label: 'Sort properties'
+    command: 'csscomb:execute'
+  }]
 
-'menu': [
-  {
-    'label': 'Packages'
-    'submenu': [
-      'label': 'CSSComb'
-      'submenu': [
-        { 'label': 'Sort properties', 'command': 'csscomb:execute' }
-      ]
-    ]
-  }
-]
+'menu': [{
+  'label': 'Packages'
+  'submenu': [
+    'label': 'CSSComb'
+    'submenu': [{
+      label: 'Sort properties',
+      command: 'csscomb:execute'
+    }]
+  ]
+}]
