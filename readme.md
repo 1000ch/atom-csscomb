@@ -2,11 +2,11 @@
 
 ## About
 
-Sort your css property for efficient gzip deflation with [CSSComb](https://github.com/csscomb/csscomb.js).
+Sort your css property with [CSSComb](https://github.com/csscomb/csscomb.js).
 
 ## Installation
 
-```sh
+```bash
 $ apm install atom-csscomb
 ```
 

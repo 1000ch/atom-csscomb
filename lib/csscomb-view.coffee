@@ -1,6 +1,5 @@
 {View} = require 'atom'
 
-module.exports =
 class AtomCsscombView extends View
   @content: ->
     @div class: 'atom-csscomb overlay from-top', =>
@@ -21,3 +20,5 @@ class AtomCsscombView extends View
       @detach()
     else
       atom.workspaceView.append(this)
+
+module.exports = AtomCsscombView

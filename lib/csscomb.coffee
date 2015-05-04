@@ -20,6 +20,8 @@ module.exports =
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'csscomb:execute', => @execute()
 
+  deactivate: ->
+
   getExecPath: ->
     "ATOM_SHELL_INTERNAL_RUN_AS_NODE=1 '#{process.execPath}'"
 
