@@ -1,6 +1,6 @@
 {
   "name": "atom-csscomb",
-  "version": "0.7.2",
+  "version": "1.0.0",
   "main": "./lib/csscomb",
   "private": true,
   "description": "Sort your css properties with CSSComb for efficient gzip deflation",
