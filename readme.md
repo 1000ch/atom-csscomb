@@ -30,4 +30,4 @@ If there is `.csscomb.json`, it will be applied primary.
 
 ## License
 
-MIT
+MIT: http://1000ch.mit-license.org
