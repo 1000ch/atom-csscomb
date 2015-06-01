@@ -21,6 +21,6 @@
     "node": "*"
   },
   "dependencies": {
-    "csscomb": "^3.1.0"
+    "csscomb": "^3.1.5"
   }
 }
