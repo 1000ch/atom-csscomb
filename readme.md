@@ -4,6 +4,8 @@
 
 Sort your css property with [CSSComb](https://github.com/csscomb/csscomb.js).
 
+![](atom-csscomb.gif)
+
 ## Installation
 
 ```bash
