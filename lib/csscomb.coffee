@@ -1,10 +1,11 @@
 'use strict';
 
-fs = require('fs')
-path = require('path')
+fs          = require('fs')
+path        = require('path')
+CSSBeautify = require('cssbeautify')
+CSSComb     = require('csscomb')
 
-CSSComb = require('csscomb')
-csscomb = new CSSComb('csscomb')
+csscomb        = new CSSComb('csscomb')
 userConfigPath = atom.project.getDirectories()[0]?.resolve('.csscomb.json')
 atomConfigPath = path.join(__dirname, '../csscomb.json')
 
@@ -34,13 +35,13 @@ module.exports =
     return unless editor isnt no
 
     grammarName = editor.getGrammar().name.toLowerCase()
-    isCSS = grammarName is 'css'
+    isCSS  = grammarName is 'css'
     isScss = grammarName is 'scss'
     isLess = grammarName is 'less'
     isHTML = grammarName is 'html'
 
     syntax = 'css'
-    if isCSS then syntax = 'css'
+    if isCSS  then syntax = 'css'
     if isScss then syntax = 'scss'
     if isLess then syntax = 'less'
     if isHTML then syntax = 'css'
@@ -50,13 +51,19 @@ module.exports =
 
     if selectedText.length isnt 0
       try
-        sortedText = csscomb.processString(selectedText, syntax)
-        editor.setTextInBufferRange(editor.getSelectedBufferRange(), sortedText)
+        sorted     = csscomb.processString(selectedText, syntax)
+        beautified = CSSBeautify(sorted, {
+          indent: '  '
+        })
+        editor.setTextInBufferRange(editor.getSelectedBufferRange(), beautified)
       catch e
         console.log(e)
     else
       try
-        sortedText = csscomb.processString(text, syntax)
-        editor.setText(sortedText)
+        sorted = csscomb.processString(text, syntax)
+        beautified = CSSBeautify(sorted, {
+          indent: '  '
+        })
+        editor.setText(beautified)
       catch e
         console.log(e)
