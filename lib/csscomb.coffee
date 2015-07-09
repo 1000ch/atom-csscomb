@@ -5,16 +5,8 @@ path        = require('path')
 CSSBeautify = require('cssbeautify')
 CSSComb     = require('csscomb')
 
-csscomb        = new CSSComb('csscomb')
 userConfigPath = atom.project.getDirectories()[0]?.resolve('.csscomb.json')
 atomConfigPath = path.join(__dirname, '../csscomb.json')
-
-if fs.existsSync(userConfigPath)
-  userConfigJson = require(userConfigPath)
-  csscomb.configure(userConfigJson)
-else if fs.existsSync(atomConfigPath)
-  atomConfigJson = require(atomConfigPath)
-  csscomb.configure(atomConfigJson)
 
 module.exports =
 
@@ -34,6 +26,12 @@ module.exports =
 
     return unless editor isnt no
 
+    csscomb = new CSSComb('csscomb')
+    if fs.existsSync(userConfigPath)
+      csscomb.configure(require(userConfigPath))
+    else if fs.existsSync(atomConfigPath)
+      csscomb.configure(require(atomConfigPath))
+
     grammarName = editor.getGrammar().name.toLowerCase()
     isCSS  = grammarName is 'css'
     isScss = grammarName is 'scss'
@@ -47,23 +45,29 @@ module.exports =
     if isHTML then syntax = 'css'
 
     text = editor.getText()
-    selectedText = editor.getSelectedText()
+    selected = editor.getSelectedText()
 
-    if selectedText.length isnt 0
+    if selected.length isnt 0
       try
-        sorted     = csscomb.processString(selectedText, syntax)
-        beautified = CSSBeautify(sorted, {
-          indent: '  '
+        sorted = csscomb.processString(selected, {
+          syntax: syntax
         })
-        editor.setTextInBufferRange(editor.getSelectedBufferRange(), beautified)
+        if isCSS
+          sorted = CSSBeautify(sorted, {
+            indent: '  '
+          })
+        editor.setTextInBufferRange(editor.getSelectedBufferRange(), sorted)
       catch e
         console.log(e)
     else
       try
-        sorted = csscomb.processString(text, syntax)
-        beautified = CSSBeautify(sorted, {
-          indent: '  '
+        sorted = csscomb.processString(text, {
+          syntax: syntax
         })
-        editor.setText(beautified)
+        if isCSS
+          sorted = CSSBeautify(sorted, {
+            indent: '  '
+          })
+        editor.setText(sorted)
       catch e
         console.log(e)
