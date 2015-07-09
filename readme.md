@@ -4,7 +4,7 @@
 
 Sort your CSS with [CSSComb](https://github.com/csscomb/csscomb.js).
 
-![](atom-csscomb.gif)
+![atom-csscomb demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/atom-csscomb.gif)
 
 ## Installation
 
