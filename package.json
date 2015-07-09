@@ -3,7 +3,7 @@
   "version": "1.3.0",
   "main": "./lib/csscomb",
   "private": true,
-  "description": "Sort your css properties with CSSComb for efficient gzip deflation",
+  "description": "Sort your CSS with CSSComb",
   "activationCommands": {
     "atom-workspace": [
       "csscomb:execute"
@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "cssbeautify": "^0.3.1",
-    "csscomb": "^3.1.5"
+    "csscomb": "^3.1.7"
   }
 }

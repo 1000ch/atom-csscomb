@@ -2,7 +2,7 @@
 
 ## About
 
-Sort your css property with [CSSComb](https://github.com/csscomb/csscomb.js).
+Sort your CSS with [CSSComb](https://github.com/csscomb/csscomb.js).
 
 ![](atom-csscomb.gif)
 
@@ -14,7 +14,7 @@ $ apm install atom-csscomb
 
 ## Usage
 
-- Press `ctrl + c`
+- Press `ctrl + alt + c`
 - `Packages` > `CSSComb` > `Sort properties`
 - Right Click > `Sort properties`
 
@@ -22,7 +22,7 @@ Selected text will be sorted if there is selection.
 
 ## Configure
 
-There 2 ways to apply configuration.
+There are 2 ways to apply configuration.
 
 1. Put `.csscomb.json` to workspace of atom.
 2. Edit `~/.atom/packages/atom-csscomb/csscomb.json`.
