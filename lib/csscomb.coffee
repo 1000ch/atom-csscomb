@@ -2,6 +2,7 @@
 
 fs          = require('fs')
 path        = require('path')
+
 CSSBeautify = require('cssbeautify')
 CSSComb     = require('csscomb')
 
@@ -10,16 +11,25 @@ atomConfigPath = path.join(__dirname, '../csscomb.json')
 
 module.exports =
 
+  config:
+    executeOnSave:
+      title: 'Execute on save'
+      description: 'Execute sorting CSS property on save.'
+      type: 'boolean'
+      default: false
+
   activate: (state) ->
-    atom.commands.add 'atom-workspace', 'csscomb:execute', => @execute()
+    atom.commands.add 'atom-workspace', 'csscomb:execute', () => @execute()
+    @editorObserver = atom.workspace.observeTextEditors (editor) =>
+      editor.getBuffer().onWillSave () =>
+        if (@isExecuteOnSave())
+          @execute()
 
   deactivate: ->
+    @editorObserver.dispose()
 
-  getExecPath: ->
-    "ATOM_SHELL_INTERNAL_RUN_AS_NODE=1 '#{process.execPath}'"
-
-  getNodePath: ->
-    atom.config.get('csscomb.nodepath')
+  isExecuteOnSave: ->
+    atom.config.get('atom-csscomb.executeOnSave')
 
   execute: ->
     editor = atom.workspace.getActiveTextEditor()
@@ -35,12 +45,14 @@ module.exports =
     grammarName = editor.getGrammar().name.toLowerCase()
     isCSS  = grammarName is 'css'
     isScss = grammarName is 'scss'
+    isSass = grammarName is 'sass'
     isLess = grammarName is 'less'
     isHTML = grammarName is 'html'
 
     syntax = 'css'
     if isCSS  then syntax = 'css'
     if isScss then syntax = 'scss'
+    if isSass then syntax = 'sass'
     if isLess then syntax = 'less'
     if isHTML then syntax = 'css'
 
@@ -52,10 +64,12 @@ module.exports =
         sorted = csscomb.processString(selected, {
           syntax: syntax
         })
+
         if isCSS
           sorted = CSSBeautify(sorted, {
             indent: '  '
           })
+
         editor.setTextInBufferRange(editor.getSelectedBufferRange(), sorted)
       catch e
         console.log(e)
