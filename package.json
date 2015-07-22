@@ -3,7 +3,7 @@
   "version": "1.5.1",
   "main": "./lib/csscomb",
   "private": true,
-  "description": "Sort your CSS with CSSComb",
+  "description": "Sort your CSS with CSSComb.",
   "activationCommands": {
     "atom-workspace": [
       "csscomb:execute"

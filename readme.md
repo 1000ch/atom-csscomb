@@ -20,9 +20,23 @@ $ apm install atom-csscomb
 
 Selected text will be sorted if there is selection.
 
-## Configure
+## Configuration
 
-There are 2 ways to apply configuration.
+### Execute on Save
+
+If you want to apply sort when you save, check it on.
+
+### Indent Type
+
+Choose the indent type from **space** (default) or **tab**.
+
+### Indent Size
+
+Set the indent size (default is **2**). This value is used when you are choosing **space** for indent type.
+
+## Sort Order
+
+There are 2 ways to apply configuration for sort order.
 
 1. Put `.csscomb.json` to workspace of atom.
 2. Edit `~/.atom/packages/atom-csscomb/csscomb.json`.
