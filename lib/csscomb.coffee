@@ -74,8 +74,8 @@ module.exports =
     text = editor.getText()
     selected = editor.getSelectedText()
     indent = ''
-    if indentType is 'space' then indent = Array(indentSize + 1).join(' ')
-    if indentType is 'tab'   then indent = '\t'
+    if @indentType() is 'space' then indent = Array(@indentSize() + 1).join(' ')
+    if @indentType() is 'tab'   then indent = '\t'
 
     if selected.length isnt 0
       try
