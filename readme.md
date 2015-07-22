@@ -22,6 +22,21 @@ Selected text will be sorted if there is selection.
 
 ## Configuration
 
+### Configure with JSON
+
+To configure with JSON file, check this.
+There are 2 ways to apply from JSON file for sort order.
+
+1. Put `.csscomb.json` to workspace of atom.
+2. Edit `~/.atom/packages/atom-csscomb/csscomb.json`.
+
+If there is `.csscomb.json`, it will be applied primary. 
+(Even though you edit `~/.atom/packages/atom-csscomb/csscomb.json`.)
+
+### Configure with preset
+
+To configure with presets (`csscomb`, `zen`, `yandex`), check this.
+
 ### Execute on Save
 
 If you want to apply sort when you save, check it on.
@@ -33,16 +48,6 @@ Choose the indent type from **space** (default) or **tab**.
 ### Indent Size
 
 Set the indent size (default is **2**). This value is used when you are choosing **space** for indent type.
-
-## Sort Order
-
-There are 2 ways to apply configuration for sort order.
-
-1. Put `.csscomb.json` to workspace of atom.
-2. Edit `~/.atom/packages/atom-csscomb/csscomb.json`.
-
-If there is `.csscomb.json`, it will be applied primary. 
-(Even though you edit `~/.atom/packages/atom-csscomb/csscomb.json`.)
 
 ## License
 

@@ -1,12 +1,11 @@
 {
   "name": "atom-csscomb",
   "version": "1.5.3",
-  "main": "./lib/csscomb",
   "private": true,
   "description": "Sort your CSS with CSSComb.",
   "activationCommands": {
     "atom-workspace": [
-      "csscomb:execute"
+      "atom-csscomb:execute"
     ]
   },
   "repository": "https://github.com/1000ch/atom-csscomb",
