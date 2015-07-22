@@ -17,6 +17,15 @@ module.exports =
       description: 'Execute sorting CSS property on save.'
       type: 'boolean'
       default: false
+    indentType:
+      title: 'Indent Type'
+      type: 'string'
+      default: 'space'
+      enum: ['space', 'tab']
+    indentSize:
+      title: 'Indent Size'
+      type: 'number'
+      default: 2
 
   activate: (state) ->
     atom.commands.add 'atom-workspace', 'csscomb:execute', () => @execute()
@@ -30,6 +39,12 @@ module.exports =
 
   isExecuteOnSave: ->
     atom.config.get('atom-csscomb.executeOnSave')
+
+  indentType: ->
+    atom.config.get('atom-csscomb.indentType')
+
+  indentSize: ->
+    atom.config.get('atom-csscomb.indentSize')
 
   execute: ->
     editor = atom.workspace.getActiveTextEditor()
@@ -58,30 +73,25 @@ module.exports =
 
     text = editor.getText()
     selected = editor.getSelectedText()
+    indent = ''
+    if indentType is 'space' then indent = Array(indentSize + 1).join(' ')
+    if indentType is 'tab'   then indent = '\t'
 
     if selected.length isnt 0
       try
-        sorted = csscomb.processString(selected, {
-          syntax: syntax
-        })
+        sorted = csscomb.processString(selected, { syntax: syntax })
 
-        if isCSS
-          sorted = CSSBeautify(sorted, {
-            indent: '  '
-          })
+        if isCSS then sorted = CSSBeautify(sorted, { indent: indent })
 
         editor.setTextInBufferRange(editor.getSelectedBufferRange(), sorted)
       catch e
         console.log(e)
     else
       try
-        sorted = csscomb.processString(text, {
-          syntax: syntax
-        })
-        if isCSS
-          sorted = CSSBeautify(sorted, {
-            indent: '  '
-          })
+        sorted = csscomb.processString(text, { syntax: syntax })
+
+        if isCSS then sorted = CSSBeautify(sorted, { indent: indent })
+
         editor.setText(sorted)
       catch e
         console.log(e)
