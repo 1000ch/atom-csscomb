@@ -1,6 +1,6 @@
 {
   "name": "atom-csscomb",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "main": "./lib/csscomb",
   "private": true,
   "description": "Sort your CSS with CSSComb",
