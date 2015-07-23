@@ -73,7 +73,6 @@ const execute = () => {
   if (!configJSON) {
     configJSON = CSSComb.getConfig(presetType);
   }
-  console.log(configJSON);
 
   let csscomb = new CSSComb();
   csscomb.configure(configJSON);
