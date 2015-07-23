@@ -4,7 +4,7 @@
 
 Sort your CSS with [CSSComb](https://github.com/csscomb/csscomb.js).
 
-![atom-csscomb demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/atom-csscomb.gif)
+![demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/demo.gif)
 
 ## Installation
 
@@ -23,6 +23,8 @@ Selected text will be sorted if there is selection.
 ## Configuration
 
 ### Configure with JSON
+
+![settings](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/settings.png)
 
 To configure with JSON file, check this.
 There are 2 ways to apply from JSON file for sort order.
