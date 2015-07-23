@@ -22,9 +22,9 @@ Selected text will be sorted if there is selection.
 
 ## Configuration
 
-### Configure with JSON
-
 ![settings](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/settings.png)
+
+### Configure with JSON
 
 To configure with JSON file, check this.
 There are 2 ways to apply from JSON file for sort order.
