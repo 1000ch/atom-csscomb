@@ -5,7 +5,8 @@ import path        from 'path';
 import CSSBeautify from 'cssbeautify';
 import CSSComb     from 'csscomb';
 
-const userConfigPath = atom.project.getDirectories()[0].resolve('.csscomb.json');
+const directory      = atom.project.getDirectories().shift();
+const userConfigPath = directory ? directory.resolve('.csscomb.json') : '';
 const atomConfigPath = path.join(__dirname, './csscomb.json');
 
 export let config = {
