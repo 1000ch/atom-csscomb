@@ -4,7 +4,7 @@
 
 Sort your CSS with [CSSComb](https://github.com/csscomb/csscomb.js).
 
-![atom-csscomb demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/atom-csscomb.gif)
+![demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/demo.gif)
 
 ## Installation
 
@@ -21,6 +21,8 @@ $ apm install atom-csscomb
 Selected text will be sorted if there is selection.
 
 ## Configuration
+
+![settings](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/settings.png)
 
 ### Configure with JSON
 
