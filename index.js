@@ -1,9 +1,9 @@
 'use babel';
 
-import fs          from 'fs';
-import path        from 'path';
-import CSSBeautify from 'cssbeautify';
-import CSSComb     from 'csscomb';
+import fs      from 'fs';
+import path    from 'path';
+import CSSfmt  from 'cssfmt';
+import CSSComb from 'csscomb';
 
 const directory      = atom.project.getDirectories().shift();
 const userConfigPath = directory ? directory.resolve('.csscomb.json') : '';
@@ -24,7 +24,7 @@ export let config = {
     default: false
   },
   executeOnSave: {
-    title: 'Execute on save',
+    title: 'Execute on Save',
     description: 'Execute sorting CSS property on save.',
     type: 'boolean',
     default: false
@@ -48,6 +48,55 @@ const executeOnSave       = () => atom.config.get('atom-csscomb.executeOnSave');
 const indentType          = () => atom.config.get('atom-csscomb.indentType');
 const indentSize          = () => atom.config.get('atom-csscomb.indentSize');
 
+const getConfig = () => {
+
+  let config;
+
+  if (configureWithJSON()) {
+    if (fs.existsSync(userConfigPath)) {
+      config = require(userConfigPath);
+    } else if (fs.existsSync(atomConfigPath)) {
+      config = require(atomConfigPath);
+    }
+  }
+
+  if (!config) {
+    config = CSSComb.getConfig(configureWithPreset());
+  }
+
+  return config;
+};
+
+const getIndent = () => {
+
+  let indent = '';
+
+  switch (indentType()) {
+    case 'space':
+      indent = Array(indentSize() + 1).join(' ');
+      break;
+    case 'tab':
+      indent = '\t';
+      break;
+  }
+
+  return indent;
+};
+
+const comb = (css = '', syntax = 'css') => {
+
+  let csscomb = new CSSComb();
+  csscomb.configure(getConfig());
+
+  let combed = csscomb.processString(css, {
+    syntax: syntax
+  });
+
+  return CSSfmt.process(combed, {
+    indent: getIndent()
+  });
+};
+
 const execute = () => {
 
   const editor = atom.workspace.getActiveTextEditor();
@@ -58,60 +107,18 @@ const execute = () => {
 
   let text = editor.getText();
   let selectedText = editor.getSelectedText();
-
-  let configJSON = null;
-  let presetType = configureWithPreset();
-
-  if (configureWithJSON()) {
-    if (fs.existsSync(userConfigPath)) {
-      configJSON = require(userConfigPath);
-    } else if (fs.existsSync(atomConfigPath)) {
-      configJSON = require(atomConfigPath);
-    }
-  }
-
-  if (!configJSON) {
-    configJSON = CSSComb.getConfig(presetType);
-  }
-
-  let csscomb = new CSSComb();
-  csscomb.configure(configJSON);
-
   let grammer = editor.getGrammar().name.toLowerCase();
-  let syntax = grammer || 'css';
-
-  let indent = '';
-  switch (indentType()) {
-    case 'space':
-      indent = Array(indentSize() + 1).join(' ');
-      break;
-    case 'tab':
-      indent = '\t';
-      break;
-  }
 
   if (selectedText.length !== 0) {
     try {
-      selectedText = csscomb.processString(selectedText, {
-        syntax: syntax
-      });
       editor.setTextInBufferRange(
         editor.getSelectedBufferRange(),
-        CSSBeautify(selectedText, {
-          indent: indent
-        })
+        comb(selectedText, grammer)
       );
     } catch (e) {}
   } else {
     try {
-      text = csscomb.processString(text, {
-        syntax: syntax
-      });
-      editor.setText(
-        CSSBeautify(text, {
-          indent: indent
-        })
-      )
+      editor.setText(comb(text, grammer));
     } catch (e) {}
   }
 };
@@ -119,9 +126,11 @@ const execute = () => {
 let editorObserver = null;
 
 export const activate = (state) => {
+
   atom.commands.add('atom-workspace', 'atom-csscomb:execute', () => {
     execute();
   });
+
   editorObserver = atom.workspace.observeTextEditors((editor) => {
     editor.getBuffer().onWillSave(() => {
       if (executeOnSave()) {
