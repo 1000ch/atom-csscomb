@@ -1,6 +1,6 @@
 'context-menu':
   'atom-workspace': [{
-    label: 'Sort properties'
+    label: 'Sort CSS properties'
     command: 'atom-csscomb:execute'
   }]
 
@@ -9,7 +9,7 @@
   'submenu': [
     'label': 'CSSComb'
     'submenu': [{
-      label: 'Sort properties',
+      label: 'Sort CSS properties',
       command: 'atom-csscomb:execute'
     }]
   ]
