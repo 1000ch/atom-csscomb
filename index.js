@@ -7,7 +7,6 @@ import CSSComb from 'csscomb';
 
 const directory      = atom.project.getDirectories().shift();
 const userConfigPath = directory ? directory.resolve('.csscomb.json') : '';
-const atomConfigPath = path.join(__dirname, './csscomb.json');
 
 export let config = {
   configureWithPreset: {
@@ -55,8 +54,6 @@ const getConfig = () => {
   if (configureWithJSON()) {
     if (fs.existsSync(userConfigPath)) {
       config = require(userConfigPath);
-    } else if (fs.existsSync(atomConfigPath)) {
-      config = require(atomConfigPath);
     }
   }
 

@@ -26,14 +26,7 @@ Selected text will be sorted if there is selection.
 
 ### Configure with JSON
 
-To configure with JSON file, check this.
-There are 2 ways to apply from JSON file for sort order.
-
-1. Put `.csscomb.json` to workspace of atom.
-2. Edit `~/.atom/packages/atom-csscomb/csscomb.json`.
-
-If there is `.csscomb.json`, it will be applied primary. 
-(Even though you edit `~/.atom/packages/atom-csscomb/csscomb.json`.)
+To configure with JSON file, put your own `.csscomb.json` to workspace.
 
 ### Configure with preset
 
