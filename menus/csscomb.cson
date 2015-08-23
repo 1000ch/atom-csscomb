@@ -1,5 +1,5 @@
 'context-menu':
-  'atom-workspace': [{
+  'atom-text-editor': [{
     label: 'Sort CSS properties'
     command: 'atom-csscomb:execute'
   }]
