@@ -1,6 +1,6 @@
 {
   "name": "atom-csscomb",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "description": "Comb your CSS properties with CSSComb.",
   "activationCommands": {
