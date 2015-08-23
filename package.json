@@ -2,7 +2,7 @@
   "name": "atom-csscomb",
   "version": "1.7.0",
   "private": true,
-  "description": "Sort your CSS with CSSComb.",
+  "description": "Comb your CSS properties with CSSComb.",
   "activationCommands": {
     "atom-workspace": [
       "atom-csscomb:execute"
@@ -21,6 +21,6 @@
   },
   "dependencies": {
     "csscomb": "^3.1.7",
-    "cssfmt": "^0.6.0"
+    "cssfmt": "^0.8.5"
   }
 }
