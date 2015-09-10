@@ -1,9 +1,9 @@
 'use babel';
 
-import fs      from 'fs';
-import path    from 'path';
-import CSSfmt  from 'cssfmt';
+import fs from 'fs';
+import path from 'path';
 import CSSComb from 'csscomb';
+import perfectionist from 'perfectionist';
 
 const directory      = atom.project.getDirectories().shift();
 const userConfigPath = directory ? directory.resolve('.csscomb.json') : '';
@@ -28,24 +28,46 @@ export let config = {
     type: 'boolean',
     default: false
   },
-  indentType: {
-    title: 'Indent Type',
+  formatType: {
+    title: 'Format Type',
+    description: 'Only facilitates simple whitespace compression around selectors & declarations.',
     type: 'string',
-    default: 'space',
-    enum: ['space', 'tab']
+    default: 'expanded',
+    enum: ['expanded', 'compact', 'compressed']
   },
   indentSize: {
     title: 'Indent Size',
     type: 'number',
     default: 2
+  },
+  maxAtRuleLength: {
+    title: 'Max at Rule Length',
+    description: 'This transform only applies to the expanded format.',
+    type: 'number',
+    default: 80
+  },
+  maxSelectorLength: {
+    title: 'Max Selector Length',
+    description: 'This transform only applies to the compressed format.',
+    type: 'number',
+    default: 80
+  },
+  maxValueLength: {
+    title: 'Max Value Length',
+    description: 'This transform only applies to the expanded format.',
+    type: 'number',
+    default: 80
   }
 };
 
 const configureWithPreset = () => atom.config.get('atom-csscomb.configureWithPreset');
 const configureWithJSON   = () => atom.config.get('atom-csscomb.configureWithJSON');
 const executeOnSave       = () => atom.config.get('atom-csscomb.executeOnSave');
-const indentType          = () => atom.config.get('atom-csscomb.indentType');
+const format              = () => atom.config.get('atom-csscomb.format');
 const indentSize          = () => atom.config.get('atom-csscomb.indentSize');
+const maxAtRuleLength     = () => atom.config.get('atom-csscomb.maxAtRuleLength');
+const maxSelectorLength   = () => atom.config.get('atom-csscomb.maxSelectorLength');
+const maxValueLength      = () => atom.config.get('atom-csscomb.maxValueLength');
 
 const getConfig = () => {
 
@@ -64,20 +86,15 @@ const getConfig = () => {
   return config;
 };
 
-const getIndent = () => {
+const getOptions = () => {
 
-  let indent = '';
-
-  switch (indentType()) {
-    case 'space':
-      indent = Array(indentSize() + 1).join(' ');
-      break;
-    case 'tab':
-      indent = '\t';
-      break;
-  }
-
-  return indent;
+  return {
+    format: formatType()
+    indentSize: indentSize(),
+    maxAtRuleLength: maxAtRuleLength(),
+    maxSelectorLength: maxSelectorLength(),
+    maxValueLength: maxValueLength()
+  };
 };
 
 const comb = (css = '', syntax = 'css') => {
@@ -89,9 +106,7 @@ const comb = (css = '', syntax = 'css') => {
     syntax: syntax
   });
 
-  return CSSfmt.process(combed, {
-    indent: getIndent()
-  });
+  return perfectionist.process(combed, getOptions());
 };
 
 const execute = () => {
