@@ -89,7 +89,7 @@ const getConfig = () => {
 const getOptions = () => {
 
   return {
-    format: formatType()
+    format: formatType(),
     indentSize: indentSize(),
     maxAtRuleLength: maxAtRuleLength(),
     maxSelectorLength: maxSelectorLength(),
