@@ -5,7 +5,7 @@ import path from 'path';
 import CSSComb from 'csscomb';
 import perfectionist from 'perfectionist';
 
-const directory      = atom.project.getDirectories().shift();
+const directory = atom.project.getDirectories().shift();
 const userConfigPath = directory ? directory.resolve('.csscomb.json') : '';
 
 export let config = {
@@ -86,17 +86,6 @@ const getConfig = () => {
   return config;
 };
 
-const getOptions = () => {
-
-  return {
-    format: formatType(),
-    indentSize: indentSize(),
-    maxAtRuleLength: maxAtRuleLength(),
-    maxSelectorLength: maxSelectorLength(),
-    maxValueLength: maxValueLength()
-  };
-};
-
 const comb = (css = '', syntax = 'css') => {
 
   let csscomb = new CSSComb();
@@ -106,7 +95,14 @@ const comb = (css = '', syntax = 'css') => {
     syntax: syntax
   });
 
-  return perfectionist.process(combed, getOptions());
+  return perfectionist.process(combed, {
+    syntax: syntax,
+    format: formatType(),
+    indentSize: indentSize(),
+    maxAtRuleLength: maxAtRuleLength(),
+    maxSelectorLength: maxSelectorLength(),
+    maxValueLength: maxValueLength()
+  }).css;
 };
 
 const execute = () => {
@@ -121,17 +117,17 @@ const execute = () => {
   let selectedText = editor.getSelectedText();
   let grammer = editor.getGrammar().name.toLowerCase();
 
-  if (selectedText.length !== 0) {
-    try {
+  try {
+    if (selectedText.length !== 0) {
       editor.setTextInBufferRange(
         editor.getSelectedBufferRange(),
         comb(selectedText, grammer)
       );
-    } catch (e) {}
-  } else {
-    try {
+    } else {
       editor.setText(comb(text, grammer));
-    } catch (e) {}
+    }
+  } catch (e) {
+    console.error(e);
   }
 };
 
