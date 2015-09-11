@@ -63,7 +63,7 @@ export let config = {
 const configureWithPreset = () => atom.config.get('atom-csscomb.configureWithPreset');
 const configureWithJSON   = () => atom.config.get('atom-csscomb.configureWithJSON');
 const executeOnSave       = () => atom.config.get('atom-csscomb.executeOnSave');
-const format              = () => atom.config.get('atom-csscomb.format');
+const formatType          = () => atom.config.get('atom-csscomb.formatType');
 const indentSize          = () => atom.config.get('atom-csscomb.indentSize');
 const maxAtRuleLength     = () => atom.config.get('atom-csscomb.maxAtRuleLength');
 const maxSelectorLength   = () => atom.config.get('atom-csscomb.maxSelectorLength');
