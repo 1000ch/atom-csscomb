@@ -36,13 +36,21 @@ To configure with presets (`csscomb`, `zen`, `yandex`), check this.
 
 If you want to apply sort when you save, check it on.
 
-### Indent Type
-
-Choose the indent type from **space** (default) or **tab**.
-
 ### Indent Size
 
-Set the indent size (default is **2**). This value is used when you are choosing **space** for indent type.
+Set the indent size (default is **2**).
+
+### Max at Rule Length
+
+Set the max at rule length (default is **80**).
+
+### Max Selector Length
+
+Set the max selector length (default is **80**).
+
+### Max Value Length
+
+Set the max value length (default is **80**).
 
 ## License
 
