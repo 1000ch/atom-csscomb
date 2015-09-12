@@ -1,4 +1,4 @@
-# [atom-csscomb](https://atom.io/packages/atom-csscomb)
+# [atom-csscomb](https://atom.io/packages/atom-csscomb) [![Dependency Status](https://david-dm.org/1000ch/atom-csscomb.svg)](https://david-dm.org/1000ch/atom-csscomb)
 
 Sort your CSS properties with [CSSComb](https://github.com/csscomb/csscomb.js).
 
