@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "csscomb": "^3.1.7",
-    "perfectionist": "^2.1.0"
+    "perfectionist": "^2.1.0",
+    "postcss": "^5.0.5"
   }
 }

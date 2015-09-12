@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import CSSComb from 'csscomb';
+import postcss from 'postcss';
 import perfectionist from 'perfectionist';
 
 const directory = atom.project.getDirectories().shift();
@@ -69,7 +70,7 @@ const maxAtRuleLength     = () => atom.config.get('atom-csscomb.maxAtRuleLength'
 const maxSelectorLength   = () => atom.config.get('atom-csscomb.maxSelectorLength');
 const maxValueLength      = () => atom.config.get('atom-csscomb.maxValueLength');
 
-const getConfig = () => {
+const getCombConfig = () => {
 
   let config;
 
@@ -88,21 +89,19 @@ const getConfig = () => {
 
 const comb = (css = '', syntax = 'css') => {
 
-  let csscomb = new CSSComb();
-  csscomb.configure(getConfig());
-
+  let csscomb = new CSSComb(getCombConfig());
   let combed = csscomb.processString(css, {
     syntax: syntax
   });
 
-  return perfectionist.process(combed, {
+  return postcss([perfectionist({
     syntax: syntax,
     format: formatType(),
     indentSize: indentSize(),
     maxAtRuleLength: maxAtRuleLength(),
     maxSelectorLength: maxSelectorLength(),
     maxValueLength: maxValueLength()
-  }).css;
+  })]).process(combed).css;
 };
 
 const execute = () => {
