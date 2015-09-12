@@ -1,7 +1,5 @@
 # [atom-csscomb](https://atom.io/packages/atom-csscomb)
 
-## About
-
 Sort your CSS properties with [CSSComb](https://github.com/csscomb/csscomb.js).
 
 ![demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/demo.gif)
