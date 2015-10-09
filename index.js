@@ -7,7 +7,7 @@ import postcss from 'postcss';
 import perfectionist from 'perfectionist';
 
 const directory = atom.project.getDirectories().shift();
-const userConfigPath = directory ? directory.resolve('.csscomb.json') : '';
+const configPath = directory ? directory.resolve('.csscomb.json') : '';
 
 export let config = {
   configureWithPreset: {
@@ -75,8 +75,8 @@ const getCombConfig = () => {
   let config;
 
   if (configureWithJSON()) {
-    if (fs.existsSync(userConfigPath)) {
-      config = require(userConfigPath);
+    if (fs.existsSync(configPath)) {
+      config = require(configPath);
     }
   }
 
@@ -112,6 +112,7 @@ const execute = () => {
     return;
   }
 
+  let position = editor.getCursorBufferPosition();
   let text = editor.getText();
   let selectedText = editor.getSelectedText();
   let grammer = editor.getGrammar().name.toLowerCase();
@@ -128,6 +129,8 @@ const execute = () => {
   } catch (e) {
     console.error(e);
   }
+
+  editor.setCursorBufferPosition(position);
 };
 
 let editorObserver = null;
