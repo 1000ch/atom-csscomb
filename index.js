@@ -119,12 +119,12 @@ const execute = () => {
 
   try {
     if (selectedText.length !== 0) {
-      editor.setTextInBufferRange(
-        editor.getSelectedBufferRange(),
-        comb(selectedText, grammer)
-      );
+      let range = editor.getSelectedBufferRange();
+      let css = comb(selectedText, grammer);
+      editor.setTextInBufferRange(range, css);
     } else {
-      editor.setText(comb(text, grammer));
+      let css = comb(text, grammer);
+      editor.setText(css);
     }
   } catch (e) {
     console.error(e);
