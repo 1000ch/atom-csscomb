@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import CSSComb from 'csscomb';
 import postcss from 'postcss';
+import safeParser from 'postcss-safe-parser';
 import perfectionist from 'perfectionist';
 import { find } from 'atom-linter';
 
@@ -112,14 +113,16 @@ function comb(css = '', syntax = 'css', config = {}) {
     syntax: syntax
   });
 
-  return postcss([perfectionist({
+  return postcss(perfectionist({
     syntax: syntax,
     format: formatType,
     indentSize: indentSize,
     maxAtRuleLength: maxAtRuleLength,
     maxSelectorLength: maxSelectorLength,
     maxValueLength: maxValueLength
-  })]).process(combed).css;
+  })).process(combed, {
+    parser: safeParser
+  });
 }
 
 function execute() {
@@ -145,14 +148,16 @@ function execute() {
 
   try {
     if (selectedText.length !== 0) {
-      let range = editor.getSelectedBufferRange();
-      let css = comb(selectedText, grammer, config);
-      editor.setTextInBufferRange(range, css);
-      editor.setCursorBufferPosition(position);
+      comb(selectedText, grammer, config).then(result => {
+        let range = editor.getSelectedBufferRange();
+        editor.setTextInBufferRange(range, result.css);
+        editor.setCursorBufferPosition(position);
+      });
     } else {
-      let css = comb(text, grammer, config);
-      editor.setText(css);
-      editor.setCursorBufferPosition(position);
+      comb(text, grammer, config).then(result => {
+        editor.setText(result.css);
+        editor.setCursorBufferPosition(position);
+      });
     }
   } catch (e) {
     console.error(e);
