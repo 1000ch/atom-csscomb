@@ -1,15 +1,13 @@
 'use babel';
 
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import CSSComb from 'csscomb';
 import postcss from 'postcss';
 import perfectionist from 'perfectionist';
+import { find } from 'atom-linter';
 
-const directory = atom.project.getDirectories().shift();
-const configPath = directory ? directory.resolve('.csscomb.json') : '';
-
-export let config = {
+export const config = {
   configureWithPreset: {
     title: 'Configure with preset',
     description: 'Configure with preset config.',
@@ -61,51 +59,70 @@ export let config = {
   }
 };
 
-const configureWithPreset = () => atom.config.get('atom-csscomb.configureWithPreset');
-const configureWithJSON   = () => atom.config.get('atom-csscomb.configureWithJSON');
-const executeOnSave       = () => atom.config.get('atom-csscomb.executeOnSave');
-const formatType          = () => atom.config.get('atom-csscomb.formatType');
-const indentSize          = () => atom.config.get('atom-csscomb.indentSize');
-const maxAtRuleLength     = () => atom.config.get('atom-csscomb.maxAtRuleLength');
-const maxSelectorLength   = () => atom.config.get('atom-csscomb.maxSelectorLength');
-const maxValueLength      = () => atom.config.get('atom-csscomb.maxValueLength');
+let editorObserver;
+let projectConfig;
+let configureWithPreset;
+let configureWithJSON;
+let executeOnSave;
+let formatType;
+let indentSize;
+let maxAtRuleLength;
+let maxSelectorLength;
+let maxValueLength;
 
-const getCombConfig = () => {
+export function activate(state) {
+  atom.commands.add('atom-workspace', 'atom-csscomb:execute', () => {
+    execute();
+  });
 
-  let config;
+  editorObserver = atom.workspace.observeTextEditors(editor => {
+    editor.getBuffer().onWillSave(() => {
+      if (executeOnSave()) {
+        execute();
+      }
+    });
+  });
 
-  if (configureWithJSON()) {
-    if (fs.existsSync(configPath)) {
-      config = require(configPath);
-    }
-  }
+  configureWithPreset = atom.config.get('atom-csscomb.configureWithPreset');
+  configureWithJSON = atom.config.get('atom-csscomb.configureWithJSON');
+  executeOnSave = atom.config.get('atom-csscomb.executeOnSave');
+  formatType = atom.config.get('atom-csscomb.formatType');
+  indentSize = atom.config.get('atom-csscomb.indentSize');
+  maxAtRuleLength = atom.config.get('atom-csscomb.maxAtRuleLength');
+  maxSelectorLength = atom.config.get('atom-csscomb.maxSelectorLength');
+  maxValueLength = atom.config.get('atom-csscomb.maxValueLength');
 
-  if (!config) {
-    config = CSSComb.getConfig(configureWithPreset());
-  }
+  atom.config.observe('atom-csscomb.configureWithPreset', value => configureWithPreset = value);
+  atom.config.observe('atom-csscomb.configureWithJSON', value => configureWithJSON = value);
+  atom.config.observe('atom-csscomb.executeOnSave', value => executeOnSave = value);
+  atom.config.observe('atom-csscomb.formatType', value => formatType = value);
+  atom.config.observe('atom-csscomb.indentSize', value => indentSize = value);
+  atom.config.observe('atom-csscomb.maxAtRuleLength', value => maxAtRuleLength = value);
+  atom.config.observe('atom-csscomb.maxSelectorLength', value => maxSelectorLength = value);
+  atom.config.observe('atom-csscomb.maxValueLength', value => maxValueLength = value);
+}
 
-  return config;
-};
+export function deactivate() {
+  editorObserver.dispose();
+}
 
-const comb = (css = '', syntax = 'css') => {
-
-  let csscomb = new CSSComb(getCombConfig());
+function comb(css = '', syntax = 'css', config = {}) {
+  let csscomb = new CSSComb(config);
   let combed = csscomb.processString(css, {
     syntax: syntax
   });
 
   return postcss([perfectionist({
     syntax: syntax,
-    format: formatType(),
-    indentSize: indentSize(),
-    maxAtRuleLength: maxAtRuleLength(),
-    maxSelectorLength: maxSelectorLength(),
-    maxValueLength: maxValueLength()
+    format: formatType,
+    indentSize: indentSize,
+    maxAtRuleLength: maxAtRuleLength,
+    maxSelectorLength: maxSelectorLength,
+    maxValueLength: maxValueLength
   })]).process(combed).css;
-};
+}
 
-const execute = () => {
-
+function execute() {
   const editor = atom.workspace.getActiveTextEditor();
 
   if (!editor) {
@@ -114,42 +131,30 @@ const execute = () => {
 
   let position = editor.getCursorBufferPosition();
   let text = editor.getText();
+  let filePath = editor.getPath();
   let selectedText = editor.getSelectedText();
   let grammer = editor.getGrammar().name.toLowerCase();
+
+  let projectConfig = find(path.dirname(filePath), '.csscomb.json');
+  let config;
+  if (configureWithJSON && projectConfig) {
+    config = require(projectConfig);
+  } else {
+    config = CSSComb.getConfig(configureWithPreset);
+  }
 
   try {
     if (selectedText.length !== 0) {
       let range = editor.getSelectedBufferRange();
-      let css = comb(selectedText, grammer);
+      let css = comb(selectedText, grammer, config);
       editor.setTextInBufferRange(range, css);
+      editor.setCursorBufferPosition(position);
     } else {
-      let css = comb(text, grammer);
+      let css = comb(text, grammer, config);
       editor.setText(css);
+      editor.setCursorBufferPosition(position);
     }
   } catch (e) {
     console.error(e);
   }
-
-  editor.setCursorBufferPosition(position);
-};
-
-let editorObserver = null;
-
-export const activate = (state) => {
-
-  atom.commands.add('atom-workspace', 'atom-csscomb:execute', () => {
-    execute();
-  });
-
-  editorObserver = atom.workspace.observeTextEditors((editor) => {
-    editor.getBuffer().onWillSave(() => {
-      if (executeOnSave()) {
-        execute();
-      }
-    });
-  });
-};
-
-export const deactivate = () => {
-  editorObserver.dispose();
-};
+}
