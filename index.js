@@ -77,7 +77,7 @@ export function activate(state) {
 
   editorObserver = atom.workspace.observeTextEditors(editor => {
     editor.getBuffer().onWillSave(() => {
-      if (executeOnSave()) {
+      if (executeOnSave) {
         execute();
       }
     });
