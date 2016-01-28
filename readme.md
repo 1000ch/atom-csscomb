@@ -20,8 +20,6 @@ Selected text will be sorted if there is selection.
 
 ## Configuration
 
-![settings](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/settings.png)
-
 ### Configure with JSON
 
 To configure with JSON file, put your own `.csscomb.json` to workspace.
