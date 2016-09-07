@@ -63,8 +63,6 @@ function getConfig(filePath) {
   let projectConfig = configFile ? require(configFile) : null;
   let config = presetConfig === 'recommend' ? require(`${__dirname}/recommend.json`) : CSSComb.getConfig(presetConfig);
 
-  console.log(config);
-
   if (extendPreset) {
     return Object.assign(config, projectConfig);
   }
