@@ -1,6 +1,6 @@
 {
   "name": "atom-csscomb",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": true,
   "description": "Sort CSS properties with CSSComb.",
   "activationCommands": {
@@ -29,7 +29,12 @@
       "description": "Select preset config bundled with CSSComb.",
       "type": "string",
       "default": "csscomb",
-      "enum": ["recommend", "csscomb", "zen", "yandex"]
+      "enum": [
+        "recommend",
+        "csscomb",
+        "zen",
+        "yandex"
+      ]
     },
     "extendPreset": {
       "title": "Extend preset",
