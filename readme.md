@@ -1,6 +1,6 @@
 # [atom-csscomb](https://atom.io/packages/atom-csscomb) [![Dependency Status](https://david-dm.org/1000ch/atom-csscomb.svg)](https://david-dm.org/1000ch/atom-csscomb)
 
-Sort your CSS properties with [CSSComb](https://github.com/csscomb/csscomb.js).
+Sort CSS properties with [CSSComb](https://github.com/csscomb/csscomb.js).
 
 ![demo](https://raw.githubusercontent.com/1000ch/atom-csscomb/master/demo.gif)
 
@@ -20,33 +20,19 @@ Selected text will be sorted if there is selection.
 
 ## Configuration
 
-### Configure with JSON
+To configure with [`.csscomb.json`](https://github.com/csscomb/csscomb.js/blob/master/doc/options.md), just put it to workspace.
 
-To configure with JSON file, put your own `.csscomb.json` to workspace.
+### Preset config
 
-### Configure with preset
+To configure with presets (`recommend`, `csscomb`, `zen`, `yandex`), check this. [`recommend`](./recommend.json) is created originally by me.
 
-To configure with presets (`csscomb`, `zen`, `yandex`), check this.
+### Extend preset
+
+Extend selected preset config with project config if exists.
 
 ### Execute on Save
 
 If you want to apply sort when you save, check it on.
-
-### Indent Size
-
-Set the indent size (default is **2**).
-
-### Max at Rule Length
-
-Set the max at rule length (default is **80**).
-
-### Max Selector Length
-
-Set the max selector length (default is **80**).
-
-### Max Value Length
-
-Set the max value length (default is **80**).
 
 ## License
 

@@ -1,24 +1,20 @@
 'use babel';
 
-import * as fs from 'fs';
 import * as path from 'path';
 import CSSComb from 'csscomb';
-import postcss from 'postcss';
-import safeParser from 'postcss-safe-parser';
-import perfectionist from 'perfectionist';
 import { find } from 'atom-linter';
 
 export const config = {
-  configureWithPreset: {
+  presetConfig: {
     title: 'Configure with preset',
-    description: 'Configure with preset config.',
+    description: 'Select preset config bundled with CSSComb.',
     type: 'string',
     default: 'csscomb',
-    enum: ['csscomb', 'zen', 'yandex']
+    enum: ['recommend', 'csscomb', 'zen', 'yandex']
   },
-  configureWithJSON: {
-    title: 'Configure with JSON',
-    description: 'Configure with JSON file in the current directory.',
+  extendPreset: {
+    title: 'Extend preset',
+    description: 'Extend selected preset config with project config if exists.',
     type: 'boolean',
     default: false
   },
@@ -27,49 +23,14 @@ export const config = {
     description: 'Execute sorting CSS property on save.',
     type: 'boolean',
     default: false
-  },
-  formatType: {
-    title: 'Format Type',
-    description: 'Only facilitates simple whitespace compression around selectors & declarations.',
-    type: 'string',
-    default: 'expanded',
-    enum: ['expanded', 'compact', 'compressed']
-  },
-  indentSize: {
-    title: 'Indent Size',
-    type: 'number',
-    default: 2
-  },
-  maxAtRuleLength: {
-    title: 'Max at Rule Length',
-    description: 'This transform only applies to the expanded format.',
-    type: 'number',
-    default: 80
-  },
-  maxSelectorLength: {
-    title: 'Max Selector Length',
-    description: 'This transform only applies to the compressed format.',
-    type: 'number',
-    default: 80
-  },
-  maxValueLength: {
-    title: 'Max Value Length',
-    description: 'This transform only applies to the expanded format.',
-    type: 'number',
-    default: 80
   }
 };
 
 let editorObserver;
 let projectConfig;
-let configureWithPreset;
-let configureWithJSON;
+let presetConfig;
+let extendPreset;
 let executeOnSave;
-let formatType;
-let indentSize;
-let maxAtRuleLength;
-let maxSelectorLength;
-let maxValueLength;
 
 export function activate(state) {
   atom.commands.add('atom-workspace', 'atom-csscomb:execute', () => {
@@ -84,44 +45,38 @@ export function activate(state) {
     });
   });
 
-  configureWithPreset = atom.config.get('atom-csscomb.configureWithPreset');
-  configureWithJSON = atom.config.get('atom-csscomb.configureWithJSON');
+  presetConfig = atom.config.get('atom-csscomb.presetConfig');
+  extendPreset = atom.config.get('atom-csscomb.extendPreset');
   executeOnSave = atom.config.get('atom-csscomb.executeOnSave');
-  formatType = atom.config.get('atom-csscomb.formatType');
-  indentSize = atom.config.get('atom-csscomb.indentSize');
-  maxAtRuleLength = atom.config.get('atom-csscomb.maxAtRuleLength');
-  maxSelectorLength = atom.config.get('atom-csscomb.maxSelectorLength');
-  maxValueLength = atom.config.get('atom-csscomb.maxValueLength');
 
-  atom.config.observe('atom-csscomb.configureWithPreset', value => configureWithPreset = value);
-  atom.config.observe('atom-csscomb.configureWithJSON', value => configureWithJSON = value);
+  atom.config.observe('atom-csscomb.presetConfig', value => presetConfig = value);
+  atom.config.observe('atom-csscomb.extendPreset', value => extendPreset = value);
   atom.config.observe('atom-csscomb.executeOnSave', value => executeOnSave = value);
-  atom.config.observe('atom-csscomb.formatType', value => formatType = value);
-  atom.config.observe('atom-csscomb.indentSize', value => indentSize = value);
-  atom.config.observe('atom-csscomb.maxAtRuleLength', value => maxAtRuleLength = value);
-  atom.config.observe('atom-csscomb.maxSelectorLength', value => maxSelectorLength = value);
-  atom.config.observe('atom-csscomb.maxValueLength', value => maxValueLength = value);
 }
 
 export function deactivate() {
   editorObserver.dispose();
 }
 
-function comb(css = '', syntax = 'css', config = {}) {
-  let csscomb = new CSSComb(config);
-  let combed = csscomb.processString(css, {
-    syntax: syntax
-  });
+function getConfig(filePath) {
+  let configFile = find(path.dirname(filePath), '.csscomb.json');
+  let projectConfig = configFile ? require(configFile) : null;
+  let config = presetConfig === 'recommend' ? require(`${__dirname}/recommend.json`) : CSSComb.getConfig(presetConfig);
 
-  return postcss(perfectionist({
-    syntax: syntax,
-    format: formatType,
-    indentSize: indentSize,
-    maxAtRuleLength: maxAtRuleLength,
-    maxSelectorLength: maxSelectorLength,
-    maxValueLength: maxValueLength
-  })).process(combed, {
-    parser: safeParser
+  console.log(config);
+
+  if (extendPreset) {
+    return Object.assign(config, projectConfig);
+  }
+
+  return projectConfig || config;
+}
+
+function comb(css = '', syntax = 'css', config = {}) {
+  const csscomb = new CSSComb(config);
+
+  return csscomb.processString(css, {
+    syntax: syntax
   });
 }
 
@@ -134,30 +89,20 @@ function execute() {
 
   let position = editor.getCursorBufferPosition();
   let text = editor.getText();
-  let filePath = editor.getPath();
   let selectedText = editor.getSelectedText();
   let grammer = editor.getGrammar().name.toLowerCase();
-
-  let projectConfig = find(path.dirname(filePath), '.csscomb.json');
-  let config;
-  if (configureWithJSON && projectConfig) {
-    config = require(projectConfig);
-  } else {
-    config = CSSComb.getConfig(configureWithPreset);
-  }
+  let config = getConfig(editor.getPath());
 
   try {
     if (selectedText.length !== 0) {
-      comb(selectedText, grammer, config).then(result => {
-        let range = editor.getSelectedBufferRange();
-        editor.setTextInBufferRange(range, result.css);
-        editor.setCursorBufferPosition(position);
-      });
+      let css = comb(selectedText, grammer, config);
+      let range = editor.getSelectedBufferRange();
+      editor.setTextInBufferRange(range, result.css);
+      editor.setCursorBufferPosition(position);
     } else {
-      comb(text, grammer, config).then(result => {
-        editor.setText(result.css);
-        editor.setCursorBufferPosition(position);
-      });
+      let css = comb(text, grammer, config);
+      editor.setText(css);
+      editor.setCursorBufferPosition(position);
     }
   } catch (e) {
     console.error(e);
