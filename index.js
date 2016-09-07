@@ -1,31 +1,11 @@
 'use babel';
 
+import { CompositeDisposable } from 'atom';
 import * as path from 'path';
 import CSSComb from 'csscomb';
 import { find } from 'atom-linter';
 
-export const config = {
-  presetConfig: {
-    title: 'Configure with preset',
-    description: 'Select preset config bundled with CSSComb.',
-    type: 'string',
-    default: 'csscomb',
-    enum: ['recommend', 'csscomb', 'zen', 'yandex']
-  },
-  extendPreset: {
-    title: 'Extend preset',
-    description: 'Extend selected preset config with project config if exists.',
-    type: 'boolean',
-    default: false
-  },
-  executeOnSave: {
-    title: 'Execute on Save',
-    description: 'Execute sorting CSS property on save.',
-    type: 'boolean',
-    default: false
-  }
-};
-
+let subscriptions;
 let editorObserver;
 let projectConfig;
 let presetConfig;
@@ -33,6 +13,24 @@ let extendPreset;
 let executeOnSave;
 
 export function activate(state) {
+  subscriptions = new CompositeDisposable();
+
+  subscriptions.add(atom.config.observe('atom-csscomb.presetConfig', value => {
+    if (value === 'recommend') {
+      presetConfig = require(`${__dirname}/recommend.json`);
+    } else {
+      presetConfig = CSSComb.getConfig(value);
+    }
+  }));
+
+  subscriptions.add(atom.config.observe('atom-csscomb.extendPreset', value => {
+    extendPreset = value;
+  }));
+
+  subscriptions.add(atom.config.observe('atom-csscomb.executeOnSave', value => {
+    executeOnSave = value;
+  }));
+
   atom.commands.add('atom-workspace', 'atom-csscomb:execute', () => {
     execute();
   });
@@ -44,30 +42,22 @@ export function activate(state) {
       }
     });
   });
-
-  presetConfig = atom.config.get('atom-csscomb.presetConfig');
-  extendPreset = atom.config.get('atom-csscomb.extendPreset');
-  executeOnSave = atom.config.get('atom-csscomb.executeOnSave');
-
-  atom.config.observe('atom-csscomb.presetConfig', value => presetConfig = value);
-  atom.config.observe('atom-csscomb.extendPreset', value => extendPreset = value);
-  atom.config.observe('atom-csscomb.executeOnSave', value => executeOnSave = value);
 }
 
 export function deactivate() {
+  subscriptions.dispose();
   editorObserver.dispose();
 }
 
 function getConfig(filePath) {
   let configFile = find(path.dirname(filePath), '.csscomb.json');
   let projectConfig = configFile ? require(configFile) : null;
-  let config = presetConfig === 'recommend' ? require(`${__dirname}/recommend.json`) : CSSComb.getConfig(presetConfig);
 
   if (extendPreset) {
     return Object.assign(config, projectConfig);
   }
 
-  return projectConfig || config;
+  return projectConfig || presetConfig;
 }
 
 function comb(css = '', syntax = 'css', config = {}) {

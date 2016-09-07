@@ -22,5 +22,26 @@
   "dependencies": {
     "atom-linter": "^8.0.0",
     "csscomb": "^3.1.8"
+  },
+  "configSchema": {
+    "presetConfig": {
+      "title": "Configure with preset",
+      "description": "Select preset config bundled with CSSComb.",
+      "type": "string",
+      "default": "csscomb",
+      "enum": ["recommend", "csscomb", "zen", "yandex"]
+    },
+    "extendPreset": {
+      "title": "Extend preset",
+      "description": "Extend selected preset config with project config if exists.",
+      "type": "boolean",
+      "default": false
+    },
+    "executeOnSave": {
+      "title": "Execute on Save",
+      "description": "Execute sorting CSS property on save.",
+      "type": "boolean",
+      "default": false
+    }
   }
 }
