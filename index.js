@@ -54,7 +54,7 @@ function getConfig(filePath) {
   let projectConfig = configFile ? require(configFile) : null;
 
   if (extendPreset) {
-    return Object.assign(config, projectConfig);
+    return Object.assign(presetConfig, projectConfig);
   }
 
   return projectConfig || presetConfig;
