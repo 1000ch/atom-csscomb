@@ -85,7 +85,7 @@ function execute() {
     if (selectedText.length !== 0) {
       let css = comb(selectedText, grammer, config);
       let range = editor.getSelectedBufferRange();
-      editor.setTextInBufferRange(range, result.css);
+      editor.setTextInBufferRange(range, css);
       editor.setCursorBufferPosition(position);
     } else {
       let css = comb(text, grammer, config);
