@@ -12,11 +12,9 @@ $ apm install atom-csscomb
 
 ## Usage
 
-- Press `ctrl + alt + c`
-- `Packages` > `CSSComb` > `Sort properties`
-- Right Click > `Sort properties`
-
-Selected text will be sorted if there is selection.
+- Packages > CSSComb > Sort properties
+- Context Menu > Sort properties
+- Command Palette (<kbd>⌘</kbd> + <kbd>shift</kbd> + <kbd>P</kbd>) > **CSSComb: Comb**
 
 ## Configuration
 
@@ -24,16 +22,12 @@ To configure with [`.csscomb.json`](https://github.com/csscomb/csscomb.js/blob/m
 
 ### Preset config
 
-To configure with presets (`recommend`, `csscomb`, `zen`, `yandex`), check this. [`recommend`](./recommend.json) is created originally by me.
+Configure with presets (`csscomb`, `zen`, `yandex`).
 
 ### Extend preset
 
 Extend selected preset config with project config if exists.
 
-### Execute on Save
-
-If you want to apply sort when you save, check it on.
-
 ## License
 
-MIT: http://1000ch.mit-license.org
+[MIT](https://1000ch.mit-license.org) © [Shogo Sensui](https://github.com/1000ch)

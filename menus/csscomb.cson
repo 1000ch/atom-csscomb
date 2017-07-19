@@ -1,7 +1,7 @@
 'context-menu':
   'atom-text-editor': [{
     label: 'Sort CSS properties'
-    command: 'atom-csscomb:execute'
+    command: 'atom-csscomb:comb'
   }]
 
 'menu': [{
@@ -10,7 +10,7 @@
     'label': 'CSSComb'
     'submenu': [{
       label: 'Sort CSS properties',
-      command: 'atom-csscomb:execute'
+      command: 'atom-csscomb:comb'
     }]
   ]
 }]

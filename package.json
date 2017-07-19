@@ -4,8 +4,8 @@
   "private": true,
   "description": "Sort CSS properties with CSSComb.",
   "activationCommands": {
-    "atom-workspace": [
-      "atom-csscomb:execute"
+    "atom-text-editor:not([mini])": [
+      "atom-csscomb:comb"
     ]
   },
   "repository": "https://github.com/1000ch/atom-csscomb",
@@ -13,15 +13,15 @@
   "author": {
     "name": "1000ch",
     "email": "shogo.sensui@gmail.com",
-    "url": "http://github.com/1000ch"
+    "url": "https://github.com/1000ch"
   },
   "engines": {
     "atom": "*",
     "node": "*"
   },
   "dependencies": {
-    "atom-linter": "^8.0.0",
-    "csscomb": "^3.1.8"
+    "atom-linter": "^10.0.0",
+    "csscomb": "^4.2.0"
   },
   "configSchema": {
     "presetConfig": {
@@ -30,7 +30,6 @@
       "type": "string",
       "default": "csscomb",
       "enum": [
-        "recommend",
         "csscomb",
         "zen",
         "yandex"
@@ -39,12 +38,6 @@
     "extendPreset": {
       "title": "Extend preset",
       "description": "Extend selected preset config with project config if exists.",
-      "type": "boolean",
-      "default": false
-    },
-    "executeOnSave": {
-      "title": "Execute on Save",
-      "description": "Execute sorting CSS property on save.",
       "type": "boolean",
       "default": false
     }
